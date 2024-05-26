@@ -1,22 +1,31 @@
 import "@stdlib/ownable";
 import "@stdlib/deploy";
+import "@stdlib/stoppable";
 
 struct LotteryRound {
-    addresses: map<Address, Bool> = emptyMap();
-    amount: Int as uint32 = 0;
-
+    addresses: map<Int, Address>;
+    amount: Int as uint32;
     // How many seconds lottery round should exist
     minNumberOfSecondsPerRound: Int as uint32;
     // Last winner address
-    lastWinnerAddress: Address = newAddress(0, 0);
+    lastWinnerAddress: Address;
     // When current lottery round started
-    startedAt: Int as uint32 = 0;
+    startedAt: Int as uint32;
 }
 
 extends mutates fun add(self: LotteryRound, address: Address) {
-    require(null == self.addresses.get(address), "You are already in playing list");
+    let index: Int = 0;
+    let isAddressFound: Bool = false;
+    while ((index < self.amount) && !isAddressFound) {
+        if (address == self.addresses.get(index)!!) {
+            isAddressFound = true;
+        }
+        index += 1;
+    }
+
+    require(!isAddressFound, "You are already in playing list");
     
-    self.addresses.set(address, true);
+    self.addresses.set(self.amount, address);
     self.amount += 1;
 }
 
@@ -26,21 +35,28 @@ extends mutates fun init(self: LotteryRound) {
     self.startedAt = now();
 }
 
-extends mutates fun getWinner(self: LotteryRound): Address {
-    require(false == self.addresses.isEmpty(), "No users want to play in current lottery round");
-    
-    let indexOfWinner: Int = random(1, self.amount);
-    let index: Int = 0;
-
-    foreach (address, value in self.addresses) {
-        index += 1;
-        if (index == indexOfWinner) {
-            return address;
-        }
-    }
+extends mutates fun onlyOneAddress(self: LotteryRound): Bool {
+    return 1 == self.amount;
 }
 
-contract Loloton with Deployable, Ownable {
+extends mutates fun isEmpty(self: LotteryRound): Bool {
+    return 0 == self.amount;
+}
+
+extends mutates fun canMakePayout(self: LotteryRound): Bool {
+    return abs(now() - self.startedAt) >= self.minNumberOfSecondsPerRound;
+}
+
+extends mutates fun getWinner(self: LotteryRound): Address {
+    require(!self.isEmpty(), "No users want to play in current lottery round");
+    
+    let indexOfWinner: Int = random(0, self.amount - 1);
+    self.lastWinnerAddress = self.addresses.get(indexOfWinner)!!;
+
+    return self.lastWinnerAddress;
+}
+
+contract Loloton with Deployable, Ownable, Resumable {
     // Current instance lottery contract version
     const Version: String = "1.0.1";
 
@@ -49,6 +65,8 @@ contract Loloton with Deployable, Ownable {
 
     // It is me %)
     owner: Address;
+
+    stopped: Bool;
 
     lotteryRound: LotteryRound;
 
@@ -59,61 +77,61 @@ contract Loloton with Deployable, Ownable {
     maxNumberOfAdressesPerRound: Int as uint32;
 
     // How many percents pay for winner
-    percentPayToWinner: Int as uint32;
+    lotteryTicketPrice: Int;
 
     // How many percents pay for winner
-    lotteryTicketPrice: Int as uint32;
+    percentPayToWinner: Int as uint32;
 
     init(minNumberOfSecondsPerRound: Int, maxNumberOfAdressesPerRound: Int, lotteryTicketPrice: Int, percentPayToWinner: Int) {
         self.owner = sender();
+        self.stopped = false;
+
+        self.lotteryRound = LotteryRound{
+            addresses: emptyMap(),
+            amount: 0,
+            minNumberOfSecondsPerRound: minNumberOfSecondsPerRound,
+            lastWinnerAddress: newAddress(0, 0),
+            startedAt: now(),
+        };
 
         self.maxNumberOfAdressesPerRound = maxNumberOfAdressesPerRound;
         self.lotteryTicketPrice = lotteryTicketPrice;
         self.percentPayToWinner = percentPayToWinner;
-
-        self.lotteryRound = LotteryRound{
-            minNumberOfSecondsPerRound: minNumberOfSecondsPerRound,
-        };
     }
 
-    fun iniNewRound() {
-        self.lotteryRound.init();
+    fun initNewLotteryRound() {
         self.numberOfFinishedLotteryRounds += 1;
+        self.lotteryRound.init();
+    }
+
+    fun playInCurrentRound() {
+        require(!self.stopped, "Lottery is stopped now. Please, come later");
+        require(context().value == self.lotteryTicketPrice, "Incorrect TON amount to play in lottery");
+        require(self.lotteryRound.amount <= self.maxNumberOfAdressesPerRound, "No space for new user in current lottery round, please, wait");
+
+        self.lotteryRound.add(sender());
     }
 
     fun payoutInCurrentRound() {
-        require(abs(now() - self.lastTimePlayed) >= self.minNumberOfSecondsPerRound, "Current lottery round cannot be completed yet");
+        require(self.lotteryRound.canMakePayout(), "Current lottery round cannot be completed yet");
 
-        let valuePayToWinner: Int = 0;
-
-        // if only one user - return all money back to his address
-        if (1 == self.addreses.length) {
-            valuePayToWinner = self.lotteryTicketPrice;
-            self.lastWinnerAddress = self.addreses.getFirstElement();
-        } else {
-            valuePayToWinner = self.addreses.length * self.lotteryTicketPrice * self.percentPayToWinner / 100;
-            self.lastWinnerAddress = self.addreses.getRandomElement();
+        let valuePayToWinner: Int = self.lotteryTicketPrice;
+        if (!self.lotteryRound.onlyOneAddress()) {
+            valuePayToWinner = (self.lotteryRound.amount - 1) * self.lotteryTicketPrice * self.percentPayToWinner / 100;
         }
-
         valuePayToWinner -= self.Comission;
+
+        let winnerAddress: Address = self.lotteryRound.getWinner();
 
         // Make payout to winner
         send(SendParameters{
-            to: self.lastWinnerAddress,
+            to: winnerAddress,
             value: valuePayToWinner,
             mode: SendIgnoreErrors,
             body: "Congratulations! You win!".asComment(),
         });
-        
-        // Init new lottery round
-        self.iniNewRound();
-    }
 
-    fun playInCurrentRound() {
-        require(context().value == self.lotteryTicketPrice, "Incorrect TON amount to play");
-        require(self.addreses.amount <= self.maxNumberOfAdressesPerRound, "No space for new user in current lottery round, please, wait");
-
-        self.addreses.add(sender());
+        self.initNewLotteryRound();
     }
 
     receive() {
@@ -127,11 +145,15 @@ contract Loloton with Deployable, Ownable {
     receive("payout") {
         self.requireOwner();
 
-        self.payoutCurrentRound();
+        self.payoutInCurrentRound();
     }
 
     get fun version(): String {
         return self.Version;
+    }
+
+    get fun balance(): Int {
+        return myBalance(); // current contract balance in nano-tons
     }
 
     get fun numberOfFinishedLotteryRounds(): Int {
@@ -142,7 +164,15 @@ contract Loloton with Deployable, Ownable {
         return self.maxNumberOfAdressesPerRound;
     }
 
-    get fun balance(): Int {
-        return myBalance(); // current contract balance in nano-tons
+    get fun lotteryTicketPrice(): Int {
+        return self.lotteryTicketPrice;
+    }
+
+    get fun percentPayToWinner(): Int {
+        return self.percentPayToWinner;
+    }
+
+    get fun lotteryRound(): LotteryRound {
+        return self.lotteryRound;
     }
 }
