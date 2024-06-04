@@ -25,9 +25,27 @@ Each lottery round lasts 10 minutes (can be changed in the original contract - [
 
 In each round (10 minutes) contract for specified amount (1 / 10 / 100 tons) collect all users transactions for specified amount.
 
-Then randomly from all users in each amount contract choose the winner and 80% of all collected amount will transfer to his/her wallet.
+Then randomly from all users in each amount contract choose the winner and 80% of all collected amount will transfer to his/her wallet. 
+Other amount of money - 20% - is project profit.
+
+If only one user takes part in lottery round - all money returned back to his wallet address.
 
 Very simple - very attractive %)
+
+
+## Example
+
+Let's look at an example with amount of 10 tons.
+
+| Time     | Action                                                                                                                    | Lottery Balance |
+|----------|---------------------------------------------------------------------------------------------------------------------------|-----------------|
+| 13:10:00 | new round started                                                                                                         | 0 tons          |
+| 13:10:04 | user_1 open TMA and make a lottery bet (10 tons) from his address                                                         | 10 tons         |
+| 13:10:30 | user_2 open TMA and make a lottery bet (10 tons) from his address                                                         | 20 tons         |
+| 13:12:43 | user_3 open TMA and make a lottery bet (10 tons) from his address                                                         | 30 tons         |
+| ...      | 100 users make a lottery bet (10 tons) from their addresses                                                               | 1030 tons       |
+| 13:20:00 | finish current round - smart contract randomly choose winner from 103 addresses and send 824 tons (80% of 1030) to winner |                 |
+| 13:20:01 | new round started        | 0 tons          |
 
 
 ## Storage
