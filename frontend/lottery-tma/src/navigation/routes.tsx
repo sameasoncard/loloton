@@ -1,6 +1,7 @@
 import type { ComponentType, JSX } from 'react';
 
 import { IndexPage } from '@/pages/IndexPage/IndexPage';
+import { InitDataPage } from '@/pages/InitDataPage/InitDataPage';
 import { TONConnectPage } from '@/pages/TONConnectPage/TONConnectPage';
 
 interface Route {
@@ -12,6 +13,7 @@ interface Route {
 
 export const routes: Route[] = [
   { path: '/', Component: IndexPage },
+  { path: '/init-data', Component: InitDataPage, title: 'Init Data' },
 
   {
     path: '/ton-connect',
