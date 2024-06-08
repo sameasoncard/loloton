@@ -6,7 +6,7 @@
   "homepage": "https://sameasoncard.github.io/loloton/",
   "scripts": {
     "dev": "vite --host",
-    "build": "tsc --noEmit && vite build",
+    "build": "tsc --noEmit && vite build && cp -r ./dist/* ../../docs/",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
 
