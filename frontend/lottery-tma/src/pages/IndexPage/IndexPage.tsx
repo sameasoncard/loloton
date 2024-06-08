@@ -2,6 +2,7 @@ import { Section, Cell, Image, List } from '@telegram-apps/telegram-ui';
 import type { FC } from 'react';
 
 import { Link } from '@/components/Link/Link.tsx';
+import { BetButtons } from '@/components/BetButtons/BetButtons.tsx';
 
 import tonSvg from './ton.svg';
 
@@ -31,6 +32,7 @@ export const IndexPage: FC = () => {
           <Cell subtitle='User data, chat information, technical data'>Init Data</Cell>
         </Link>
       </Section>
+      <BetButtons header='Your Lottery Ticket' />
     </List>
   );
 };

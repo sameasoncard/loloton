@@ -1,0 +1,12 @@
+.bet-buttons__list {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    row-gap: 20px;
+}
+
+.bet-buttons__list button {
+    width: 120px;
+}
