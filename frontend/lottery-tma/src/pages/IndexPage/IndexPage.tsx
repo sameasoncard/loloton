@@ -1,6 +1,6 @@
 import { useInitData, type User } from '@tma.js/sdk-react';
 
-import {Section, List, Placeholder, Cell, Image} from '@telegram-apps/telegram-ui';
+import {Section, List, Placeholder, Cell, Info, Image} from '@telegram-apps/telegram-ui';
 import type { FC } from 'react';
 import { useMemo } from 'react';
 
@@ -25,7 +25,7 @@ export const IndexPage: FC = () => {
     return (
     <List>
         <Section header={`Hello, ${user?.firstName ?? 'lucky'}! Connect your wallet`}>
-            <Cell>
+            <Info type="text">
                 <Placeholder
                     className='ton-connect-page__placeholder'
                     header='TON Connect'
@@ -40,7 +40,7 @@ export const IndexPage: FC = () => {
                 />
 
                 <TonConnectButton className='index-page__ton-connect__button'/>
-            </Cell>
+            </Info>
         </Section>
 
         <Section header={`Current lottery round`}>
