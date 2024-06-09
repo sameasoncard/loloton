@@ -8,7 +8,7 @@ export interface BetButton {
 }
 
 export const BetButton: FC<BetButton> = ({ txt }) => (
-  <Button mode="filled" size="l">
+  <Button mode="filled" size="m">
     {txt}
   </Button>
 );

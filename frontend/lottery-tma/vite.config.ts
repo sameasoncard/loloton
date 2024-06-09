@@ -6,6 +6,7 @@ import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import react from '@vitejs/plugin-react-swc';
 import basicSsl from '@vitejs/plugin-basic-ssl';
+import { nodePolyfills } from "vite-plugin-node-polyfills";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -25,6 +26,7 @@ export default defineConfig({
       certDir: resolve('certificates'),
       domains: ['tma.internal'],
     }),
+    nodePolyfills(),
   ],
   server: {
     // Specifying this property makes Vite dev server to start at the specified host. As long
