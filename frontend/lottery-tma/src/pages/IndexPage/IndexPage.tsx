@@ -58,7 +58,7 @@ export const IndexPage: FC = () => {
                         messages: [
                             {
                                 address: ContractsInfo["1"].address,
-                                amount: "10000000",
+                                amount: ContractsInfo["1"].amount,
                             },
                         ]
                     })} />}
@@ -71,8 +71,8 @@ export const IndexPage: FC = () => {
                         validUntil: Math.floor(Date.now() / 1000) + 60,
                         messages: [
                             {
-                                address: ContractsInfo["1"].address,
-                                amount: "100000000",
+                                address: ContractsInfo["10"].address,
+                                amount: ContractsInfo["10"].amount,
                             },
                         ]
                     })} />}
@@ -85,8 +85,8 @@ export const IndexPage: FC = () => {
                         validUntil: Math.floor(Date.now() / 1000) + 60,
                         messages: [
                             {
-                                address: ContractsInfo["1"].address,
-                                amount: "1000000000",
+                                address: ContractsInfo["100"].address,
+                                amount: ContractsInfo["100"].amount,
                             },
                         ]
                     })} />}
