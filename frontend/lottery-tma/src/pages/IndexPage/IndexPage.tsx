@@ -16,7 +16,7 @@ export const IndexPage: FC = () => {
 
     useEffect(() => {
         hapticFeedback.impactOccurred('medium');
-    });
+    }, []);
 
     // user
     const initData = useInitData();
@@ -26,6 +26,10 @@ export const IndexPage: FC = () => {
 
     // wallet
     const wallet = useTonWallet();
+
+    useEffect(() => {
+        hapticFeedback.impactOccurred('heavy');
+    }, [wallet]);
 
     return (
     <List>
