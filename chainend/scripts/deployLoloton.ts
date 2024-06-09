@@ -3,7 +3,7 @@ import { Loloton } from '../wrappers/Loloton';
 import { NetworkProvider } from '@ton/blueprint';
 
 export async function run(provider: NetworkProvider) {
-    const loloton = provider.open(await Loloton.fromInit());
+    const loloton = provider.open(await Loloton.fromInit(600n, 1000n, toNano("1"), 80n));
 
     await loloton.send(
         provider.sender(),

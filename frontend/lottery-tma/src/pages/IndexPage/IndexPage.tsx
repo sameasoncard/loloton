@@ -4,16 +4,17 @@ import {Section, List, Placeholder, Cell, Info, Image, Text} from '@telegram-app
 import type { FC } from 'react';
 import { useMemo, useEffect } from 'react';
 
-import { TonConnectButton, useTonWallet, CHAIN } from '@tonconnect/ui-react';
+import { TonConnectButton, useTonWallet, useTonConnectUI, CHAIN } from '@tonconnect/ui-react';
 
 import { BetButton } from '@/components/BetButton/BetButton.tsx';
 
 import './IndexPage.css';
 import logoImg from  '../../assets/loloton-logo-200x200.jpg';
 
+import { ContractsInfo } from '@/contracts/data.tsx';
+
 export const IndexPage: FC = () => {
     const hapticFeedback = useHapticFeedback();
-
     useEffect(() => {
         hapticFeedback.impactOccurred('medium');
     }, []);
@@ -26,49 +27,74 @@ export const IndexPage: FC = () => {
 
     // wallet
     const wallet = useTonWallet();
-
     useEffect(() => {
         hapticFeedback.impactOccurred('heavy');
     }, [wallet]);
 
+    // transactions
+    const [tonConnectUI, ] = useTonConnectUI();
+
     return (
-    <List>
-        <Section header={`Hello, ${user?.firstName ?? 'lucky'}! Connect your wallet`}>
-            <Info type="text">
-                <Placeholder
-                    className='ton-connect-page__placeholder'
-                    header='TON Connect'
-                    description={<Image size={96} src={logoImg} className="index-page__logo_img" />}
-                />
+        <List>
+            <Section header={`Hello, ${user?.firstName ?? 'lucky'}! Connect your wallet`}>
+                <Info type="text">
+                    <Placeholder
+                        className='ton-connect-page__placeholder'
+                        header='TON Connect'
+                        description={<Image size={96} src={logoImg} className="index-page__logo_img" />}
+                    />
 
-                <Text Component="div" className="index-page__text">{wallet
-                    ? `Your wallet in ${wallet.account.chain === CHAIN.TESTNET ? "testnet" : "mainnet"} successfully connected! Now you can buy lottery ticket and try to win.`
-                    : `Connect your TON wallet to buy lottery ticket and win!`}</Text>
+                    <Text Component="div" className="index-page__text">{wallet
+                        ? `Your wallet in ${wallet.account.chain === CHAIN.TESTNET ? "testnet" : "mainnet"} successfully connected! Now you can buy lottery ticket and try to win.`
+                        : `Connect your TON wallet to buy lottery ticket and win!`}</Text>
 
-                <TonConnectButton className='index-page__ton-connect__button'/>
-            </Info>
-        </Section>
-
-        <Section header={`Current lottery round`}>
-            <Cell
-                after={<BetButton txt='1 ton' isDisabled={!wallet} />}
-                description={`100 tons in lottery pool`}
-            >
-                Buy ticket for 1 ton
-            </Cell>
-            <Cell
-                after={<BetButton txt='10 tons' isDisabled={!wallet} />}
-                description={`30 tons in lottery pool`}
-            >
-                Buy ticket for 10 ton
-            </Cell>
-            <Cell
-                after={<BetButton txt='100 tons' isDisabled={!wallet} />}
-                description={`600 tons in lottery pool`}
-            >
-                Buy ticket for 100 ton
-            </Cell>
-        </Section>
-    </List>
+                    <TonConnectButton className='index-page__ton-connect__button'/>
+                </Info>
+            </Section>
+            <Section header={`Current lottery round`}>
+                <Cell
+                    after={<BetButton txt='1 ton' isDisabled={!wallet} onClick={() => tonConnectUI.sendTransaction({
+                        validUntil: Math.floor(Date.now() / 1000) + 60,
+                        messages: [
+                            {
+                                address: ContractsInfo["1"].address,
+                                amount: "10000000",
+                            },
+                        ]
+                    })} />}
+                    description={`100 tons in lottery pool`}
+                >
+                    Buy ticket for 1 ton
+                </Cell>
+                <Cell
+                    after={<BetButton txt='10 tons' isDisabled={!wallet} onClick={() => tonConnectUI.sendTransaction({
+                        validUntil: Math.floor(Date.now() / 1000) + 60,
+                        messages: [
+                            {
+                                address: ContractsInfo["1"].address,
+                                amount: "100000000",
+                            },
+                        ]
+                    })} />}
+                    description={`30 tons in lottery pool`}
+                >
+                    Buy ticket for 10 ton
+                </Cell>
+                <Cell
+                    after={<BetButton txt='100 tons' isDisabled={!wallet} onClick={() => tonConnectUI.sendTransaction({
+                        validUntil: Math.floor(Date.now() / 1000) + 60,
+                        messages: [
+                            {
+                                address: ContractsInfo["1"].address,
+                                amount: "1000000000",
+                            },
+                        ]
+                    })} />}
+                    description={`600 tons in lottery pool`}
+                >
+                    Buy ticket for 100 ton
+                </Cell>
+            </Section>
+        </List>
   );
 };
