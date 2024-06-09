@@ -14,7 +14,7 @@ export const IndexPage: FC = () => {
     // user
     const initData = useInitData();
     const user = useMemo<User | undefined>(() => {
-        return initData && initData.user ? initData.user : undefined;
+        return initData && initData.receiver ? initData.receiver : undefined;
     }, [initData]);
 
     // wallet
@@ -38,7 +38,9 @@ export const IndexPage: FC = () => {
             />
         </Section>
 
-        <BetButtons header='Your Lottery Ticket' isDisabled={!wallet} />
+        <Section>
+            <BetButtons header='Your Lottery Ticket' isDisabled={!wallet} />
+        </Section>
     </List>
   );
 };
