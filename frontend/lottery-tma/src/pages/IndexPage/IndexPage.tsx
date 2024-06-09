@@ -1,11 +1,12 @@
 import { useInitData, type User } from '@tma.js/sdk-react';
 
-import {Section, List, Text, Placeholder} from '@telegram-apps/telegram-ui';
+import {Section, List, Text, Placeholder, Cell} from '@telegram-apps/telegram-ui';
 import type { FC } from 'react';
 import { useMemo } from 'react';
 
 import { TonConnectButton, useTonWallet, CHAIN } from '@tonconnect/ui-react';
 
+import { BetButton } from '@/components/BetButton/BetButton.tsx';
 import { BetButtons } from '@/components/BetButtons/BetButtons.tsx';
 
 import './IndexPage.css';
@@ -40,6 +41,27 @@ export const IndexPage: FC = () => {
 
         <Section>
             <BetButtons header='Your Lottery Ticket' isDisabled={!wallet} />
+        </Section>
+
+        <Section>
+            <Cell
+                after={<BetButton txt='1 ton' isDisabled={!wallet} />}
+                description={`100 tons in lottery pool`}
+            >
+                Buy ticket for 1 ton
+            </Cell>
+            <Cell
+                after={<BetButton txt='10 tons' isDisabled={!wallet} />}
+                description={`30 tons in lottery pool`}
+            >
+                Buy ticket for 10 ton
+            </Cell>
+            <Cell
+                after={<BetButton txt='100 tons' isDisabled={!wallet} />}
+                description={`600 tons in lottery pool`}
+            >
+                Buy ticket for 100 ton
+            </Cell>
         </Section>
     </List>
   );
