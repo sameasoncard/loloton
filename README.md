@@ -1,5 +1,8 @@
 # loloton
 
+> You can visit production version for dorahacks hackathon in test environment: 
+> [https://t.me/lolotonTestBot](https://t.me/lolotonTestBot)
+
 Simple lottery project in ton ecosystem.
 
 The project consists  of three main parts:
