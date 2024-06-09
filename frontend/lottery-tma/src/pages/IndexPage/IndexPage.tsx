@@ -1,8 +1,6 @@
 import {Section, Cell, Image, List } from '@telegram-apps/telegram-ui';
 import type { FC } from 'react';
 
-import {Address} from "@ton/core";
-
 import { TonConnectButton, useTonWallet, CHAIN } from '@tonconnect/ui-react';
 
 import { Link } from '@/components/Link/Link.tsx';
@@ -20,9 +18,11 @@ export const IndexPage: FC = () => {
         <Section
             header='Your wallet to play in lottery'
             footer='Connect your TON wallet to buy lottery ticket and win!'>
-            <Cell>
-                {!wallet && <TonConnectButton className='ton-connect-page__button' />}
-                {wallet && `Your wallet ${Address.parse(wallet.account.address)} (${wallet.account.chain === CHAIN.TESTNET ? "testnet" : "mainnet"}) connected and`}
+            <Cell
+                after={<TonConnectButton className='ton-connect-page__button' />}
+                description={wallet && `Your wallet from ${wallet.account.chain === CHAIN.TESTNET ? "testnet" : "mainnet"} connected and now you can buy lottery ticket and win.`}
+            >
+                Your TON wallet
             </Cell>
         </Section>
 
