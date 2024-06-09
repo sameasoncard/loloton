@@ -1,5 +1,4 @@
 .ton-connect-page__placeholder {
-  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
@@ -8,7 +7,7 @@
 }
 
 .ton-connect-page__button {
-  margin: 16px auto 0;
+  margin: 10px auto 0;
 }
 
 .ton-connect-page__button-connected {

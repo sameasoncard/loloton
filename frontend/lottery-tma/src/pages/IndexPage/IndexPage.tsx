@@ -1,6 +1,6 @@
 import { useInitData, type User } from '@tma.js/sdk-react';
 
-import {Section, List, Text, Placeholder, Cell} from '@telegram-apps/telegram-ui';
+import {Section, List, Text, Placeholder, Cell, Image} from '@telegram-apps/telegram-ui';
 import type { FC } from 'react';
 import { useMemo } from 'react';
 
@@ -9,8 +9,10 @@ import { TonConnectButton, useTonWallet, CHAIN } from '@tonconnect/ui-react';
 import { BetButton } from '@/components/BetButton/BetButton.tsx';
 
 import './IndexPage.css';
+import logoImg from  '../../assets/loloton-logo-200x200.jpg';
 
 export const IndexPage: FC = () => {
+
     // user
     const initData = useInitData();
     const user = useMemo<User | undefined>(() => {
@@ -22,7 +24,29 @@ export const IndexPage: FC = () => {
 
     return (
     <List>
-        <Section header={`Hello, ${user?.username ?? 'lucky'}! Set your wallet to play in lottery`}>
+
+
+        <Section header={`Hello, ${user?.firstName ?? 'lucky'}! Connect your wallet`}>
+            <Cell>
+                <Placeholder
+                    className='ton-connect-page__placeholder'
+                    header='TON Connect'
+                    description={
+                        <>
+                            <Image size={96} src={logoImg} />
+                            <Text>
+                                {!wallet && `Connect your TON wallet to buy lottery ticket and win!`}
+                                {wallet && `Your wallet from ${wallet.account.chain === CHAIN.TESTNET ? "testnet" : "mainnet"} successfully connected!<br/>Now you can buy lottery ticket and try to win.`}
+                            </Text>
+
+                        </>
+                    }
+                />
+                <TonConnectButton className='index-page__ton-connect__button'/>
+            </Cell>
+        </Section>
+
+        <Section header={`Hello, ${user?.firstName ?? 'lucky'}! Set your wallet to play in lottery`}>
             <Cell>
                 <Placeholder
                     className='ton-connect-page__placeholder'
