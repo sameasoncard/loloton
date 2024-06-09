@@ -31,5 +31,6 @@
 }
 
 .index-page__text {
+  text-align: center;
   margin: 2px auto;
 }
