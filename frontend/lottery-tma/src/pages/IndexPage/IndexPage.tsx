@@ -32,9 +32,12 @@ export const IndexPage: FC = () => {
                     description={<Image size={96} src={logoImg} className="index-page__logo_img" />}
                 />
 
-                {wallet
-                    ? <p>Your wallet in ${wallet.account.chain === CHAIN.TESTNET ? "testnet" : "mainnet"} successfully connected!<br/>Now you can buy lottery ticket and try to win.</p>
-                    : <p>Connect your TON wallet<br/>to buy lottery ticket and win!</p>}
+                <Placeholder
+                    className='ton-connect-page__placeholder'
+                    description={wallet
+                        ? `Your wallet in ${wallet.account.chain === CHAIN.TESTNET ? "testnet" : "mainnet"} successfully connected! Now you can buy lottery ticket and try to win.`
+                        : `Connect your TON wallet to buy lottery ticket and win!`}
+                />
 
                 <TonConnectButton className='index-page__ton-connect__button'/>
             </Cell>
