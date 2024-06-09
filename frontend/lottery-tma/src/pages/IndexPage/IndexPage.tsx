@@ -7,7 +7,6 @@ import { useMemo } from 'react';
 import { TonConnectButton, useTonWallet, CHAIN } from '@tonconnect/ui-react';
 
 import { BetButton } from '@/components/BetButton/BetButton.tsx';
-import { BetButtons } from '@/components/BetButtons/BetButtons.tsx';
 
 import './IndexPage.css';
 
@@ -24,26 +23,24 @@ export const IndexPage: FC = () => {
     return (
     <List>
         <Section header={`Hello, ${user?.username ?? 'lucky'}! Set your wallet to play in lottery`}>
-            <Placeholder
-                className='ton-connect-page__placeholder'
-                header='TON Connect'
-                description={
-                    <>
-                        <Text>
-                            {!wallet && `Connect your TON wallet to buy lottery ticket and win!`}
-                            {wallet && `Your wallet from ${wallet.account.chain === CHAIN.TESTNET ? "testnet" : "mainnet"} connected and now you can buy lottery ticket and win.`}
-                        </Text>
-                        <TonConnectButton className='index-page__ton-connect__button'/>
-                    </>
-                }
-            />
+            <Cell>
+                <Placeholder
+                    className='ton-connect-page__placeholder'
+                    header='TON Connect'
+                    description={
+                        <>
+                            <Text>
+                                {!wallet && `Connect your TON wallet to buy lottery ticket and win!`}
+                                {wallet && `Your wallet from ${wallet.account.chain === CHAIN.TESTNET ? "testnet" : "mainnet"} successfully connected!<br/>Now you can buy lottery ticket and try to win.`}
+                            </Text>
+                            <TonConnectButton className='index-page__ton-connect__button'/>
+                        </>
+                    }
+                />
+            </Cell>
         </Section>
 
-        <Section>
-            <BetButtons header='Your Lottery Ticket' isDisabled={!wallet} />
-        </Section>
-
-        <Section>
+        <Section header={`Current lottery round`}>
             <Cell
                 after={<BetButton txt='1 ton' isDisabled={!wallet} />}
                 description={`100 tons in lottery pool`}
