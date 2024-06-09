@@ -1,6 +1,6 @@
-import { useInitData, type User } from '@tma.js/sdk-react';
+import { useInitData, useHapticFeedback, type User } from '@tma.js/sdk-react';
 
-import {Section, List, Placeholder, Cell, Info, Image} from '@telegram-apps/telegram-ui';
+import {Section, List, Placeholder, Cell, Info, Image, Text} from '@telegram-apps/telegram-ui';
 import type { FC } from 'react';
 import { useMemo } from 'react';
 
@@ -12,6 +12,9 @@ import './IndexPage.css';
 import logoImg from  '../../assets/loloton-logo-200x200.jpg';
 
 export const IndexPage: FC = () => {
+    const hapticFeedback = useHapticFeedback();
+    hapticFeedback.impactOccurred('medium');
+    hapticFeedback.impactOccurred('heavy');
 
     // user
     const initData = useInitData();
@@ -32,12 +35,9 @@ export const IndexPage: FC = () => {
                     description={<Image size={96} src={logoImg} className="index-page__logo_img" />}
                 />
 
-                <Placeholder
-                    className='ton-connect-page__placeholder'
-                    description={wallet
-                        ? `Your wallet in ${wallet.account.chain === CHAIN.TESTNET ? "testnet" : "mainnet"} successfully connected! Now you can buy lottery ticket and try to win.`
-                        : `Connect your TON wallet to buy lottery ticket and win!`}
-                />
+                <Text className="index-page__text">{wallet
+                    ? `Your wallet in ${wallet.account.chain === CHAIN.TESTNET ? "testnet" : "mainnet"} successfully connected! Now you can buy lottery ticket and try to win.`
+                    : `Connect your TON wallet to buy lottery ticket and win!`}</Text>
 
                 <TonConnectButton className='index-page__ton-connect__button'/>
             </Info>

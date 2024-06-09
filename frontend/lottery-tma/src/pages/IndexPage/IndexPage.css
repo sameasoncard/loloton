@@ -29,3 +29,7 @@
 .index-page__logo_img {
   margin: 6px auto 0;
 }
+
+.index-page__text {
+  margin: 2px auto;
+}
