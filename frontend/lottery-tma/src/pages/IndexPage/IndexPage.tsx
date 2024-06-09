@@ -24,24 +24,17 @@ export const IndexPage: FC = () => {
 
     return (
     <List>
-
-
         <Section header={`Hello, ${user?.firstName ?? 'lucky'}! Connect your wallet`}>
             <Cell>
                 <Placeholder
                     className='ton-connect-page__placeholder'
                     header='TON Connect'
-                    description={
-                        <>
-                            <Image size={96} src={logoImg} />
-                            <Text>
-                                {!wallet && `Connect your TON wallet to buy lottery ticket and win!`}
-                                {wallet && `Your wallet from ${wallet.account.chain === CHAIN.TESTNET ? "testnet" : "mainnet"} successfully connected!<br/>Now you can buy lottery ticket and try to win.`}
-                            </Text>
-
-                        </>
-                    }
+                    description={<Image size={96} src={logoImg} className="index-page__logo_img" />}
                 />
+                <Text>
+                    {!wallet && `Connect your TON wallet to buy lottery ticket and win!`}
+                    {wallet && `Your wallet from ${wallet.account.chain === CHAIN.TESTNET ? "testnet" : "mainnet"} successfully connected!<br/>Now you can buy lottery ticket and try to win.`}
+                </Text>
                 <TonConnectButton className='index-page__ton-connect__button'/>
             </Cell>
         </Section>
