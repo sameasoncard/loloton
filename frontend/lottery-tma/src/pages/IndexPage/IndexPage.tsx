@@ -58,9 +58,13 @@ export const IndexPage: FC = () => {
             const balance1 = await lolotonContract_1.getBalance();
             const lotteryRound1 = await lolotonContract_1.getLotteryRound();
 
-            setDescriptionInLolotonContract_1(`${fromNano(balance1)} tons in lottery pool (${lotteryRound1.amount} users)`);
+            setDescriptionInLolotonContract_1(`${fromNano(Math.floor(Number(balance1)))} tons in lottery pool, ${lotteryRound1.amount} users`);
         }
-        getContractData();
+
+        const intervalId = setInterval(() => {
+            getContractData();
+        }, 1000 * 10) // in milliseconds
+        return () => clearInterval(intervalId)
 
     }, [lolotonContract_1])
 
