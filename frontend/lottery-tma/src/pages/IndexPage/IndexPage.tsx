@@ -58,14 +58,14 @@ export const IndexPage: FC = () => {
             const balance1 = await lolotonContract_1.getBalance();
             const lotteryRound1 = await lolotonContract_1.getLotteryRound();
 
-            setDescriptionInLolotonContract_1(`${fromNano(Math.floor(Number(balance1)))} tons in lottery pool, ${lotteryRound1.amount} users`);
+            setDescriptionInLolotonContract_1(`${fromNano(Math.floor(Number(balance1))).split(".")[0]} TONs in lottery, ${lotteryRound1.amount} users`);
         }
 
+        getContractData();
         const intervalId = setInterval(() => {
             getContractData();
         }, 1000 * 10) // in milliseconds
-        return () => clearInterval(intervalId)
-
+        return () => clearInterval(intervalId);
     }, [lolotonContract_1])
 
     return (
@@ -101,7 +101,7 @@ export const IndexPage: FC = () => {
                     Buy ticket for 1 ton
                 </Cell>
                 <Cell
-                    after={<BetButton txt='10 tons' isDisabled={!wallet} onClick={() => tonConnectUI.sendTransaction({
+                    after={<BetButton txt='10 tons' isDisabled={true} onClick={() => tonConnectUI.sendTransaction({
                         validUntil: Math.floor(Date.now() / 1000) + 60,
                         messages: [
                             {
@@ -110,12 +110,12 @@ export const IndexPage: FC = () => {
                             },
                         ]
                     })} />}
-                    description={`...`}
+                    description={`not supported in test version`}
                 >
                     Buy ticket for 10 ton
                 </Cell>
                 <Cell
-                    after={<BetButton txt='100 tons' isDisabled={!wallet} onClick={() => tonConnectUI.sendTransaction({
+                    after={<BetButton txt='100 tons' isDisabled={true} onClick={() => tonConnectUI.sendTransaction({
                         validUntil: Math.floor(Date.now() / 1000) + 60,
                         messages: [
                             {
@@ -124,7 +124,7 @@ export const IndexPage: FC = () => {
                             },
                         ]
                     })} />}
-                    description={`...`}
+                    description={`not supported in test version`}
                 >
                     Buy ticket for 100 ton
                 </Cell>
