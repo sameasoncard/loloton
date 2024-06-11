@@ -1,6 +1,6 @@
 # loloton
 
-> You can visit production version for dorahacks hackathon in test environment: 
+> You can visit production version for dorahacks hackathon in test environment (in bot you can find working TMA + wallet integration + smart contract communication): 
 > [https://t.me/lolotonTestBot](https://t.me/lolotonTestBot)
 
 Simple lottery project in ton ecosystem.

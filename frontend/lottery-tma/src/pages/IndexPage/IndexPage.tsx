@@ -1,7 +1,7 @@
 import { useInitData, useHapticFeedback, type User } from '@tma.js/sdk-react';
 
 import {Section, List, Placeholder, Cell, Info, Image, Text} from '@telegram-apps/telegram-ui';
-import type { FC } from 'react';
+import {FC, useState} from 'react';
 import { useMemo, useEffect } from 'react';
 
 import { TonConnectButton, useTonWallet, useTonConnectUI, CHAIN } from '@tonconnect/ui-react';
@@ -12,6 +12,11 @@ import './IndexPage.css';
 import logoImg from  '../../assets/loloton-logo-200x200.jpg';
 
 import { ContractsInfo } from '@/contracts/data.tsx';
+
+import { Loloton } from '@/contracts/Loloton.ts';
+import { useTonClient } from '@/hooks/useTonClient.ts';
+import { useAsyncInitialize } from '@/hooks/useAsyncInitialize.ts';
+import { Address, OpenedContract, fromNano } from '@ton/core';
 
 export const IndexPage: FC = () => {
     const hapticFeedback = useHapticFeedback();
@@ -33,6 +38,31 @@ export const IndexPage: FC = () => {
 
     // transactions
     const [tonConnectUI, ] = useTonConnectUI();
+
+    // read data
+    const [descriptionInLolotonContract_1, setDescriptionInLolotonContract_1] = useState('...');
+    const client = useTonClient();
+    const lolotonContract_1 = useAsyncInitialize(async () => {
+        if (!client) return;
+
+        const contract = Loloton.fromAddress(Address.parse(ContractsInfo["1"].address));
+        return client.open(contract) as OpenedContract<Loloton>;
+    }, [client]);
+    useEffect(() => {
+        if (!client) return;
+        if (!lolotonContract_1) return;
+
+        async function getContractData() {
+            if (!lolotonContract_1) return;
+
+            const balance1 = await lolotonContract_1.getBalance();
+            const lotteryRound1 = await lolotonContract_1.getLotteryRound();
+
+            setDescriptionInLolotonContract_1(`${fromNano(balance1)} tons in lottery pool (${lotteryRound1.amount} users)`);
+        }
+        getContractData();
+
+    }, [lolotonContract_1])
 
     return (
         <List>
@@ -62,7 +92,7 @@ export const IndexPage: FC = () => {
                             },
                         ]
                     })} />}
-                    description={`100 tons in lottery pool`}
+                    description={descriptionInLolotonContract_1}
                 >
                     Buy ticket for 1 ton
                 </Cell>
@@ -76,7 +106,7 @@ export const IndexPage: FC = () => {
                             },
                         ]
                     })} />}
-                    description={`30 tons in lottery pool`}
+                    description={`...`}
                 >
                     Buy ticket for 10 ton
                 </Cell>
@@ -90,7 +120,7 @@ export const IndexPage: FC = () => {
                             },
                         ]
                     })} />}
-                    description={`600 tons in lottery pool`}
+                    description={`...`}
                 >
                     Buy ticket for 100 ton
                 </Cell>
