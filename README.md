@@ -5,6 +5,9 @@
 > 
 > Contract data in testnet (deployed just for 1 ton lottery): 
 > [https://testnet.tonscan.org/address/EQCSbZH-qqj3IjHADY6tk87tlT_wohnFsnJuHsWEy_HQkcvU](https://testnet.tonscan.org/address/EQCSbZH-qqj3IjHADY6tk87tlT_wohnFsnJuHsWEy_HQkcvU)
+> 
+> Backend is just one script to make payout (making request to contract method):
+> [./chainend/script/payout.ts](./chainend/script/payout.ts)
 
 
 Simple lottery project in ton ecosystem.
