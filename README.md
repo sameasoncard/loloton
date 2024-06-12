@@ -2,12 +2,16 @@
 
 > You can visit production version for dorahacks hackathon in test environment (in bot you can find working TMA + wallet integration + smart contract communication): 
 > [https://t.me/lolotonTestBot](https://t.me/lolotonTestBot)
+> 
+> Contract data in testnet (deployed just for 1 ton lottery): 
+> [https://testnet.tonscan.org/address/EQCSbZH-qqj3IjHADY6tk87tlT_wohnFsnJuHsWEy_HQkcvU](https://testnet.tonscan.org/address/EQCSbZH-qqj3IjHADY6tk87tlT_wohnFsnJuHsWEy_HQkcvU)
+
 
 Simple lottery project in ton ecosystem.
 
 The project consists  of three main parts:
 - frontend, TMA (react)
-- backend
+- backend (used to call contract method for payment in lottery)
 - smart contract to run main logic of lottery (tact + blueprint env.)
 
 
